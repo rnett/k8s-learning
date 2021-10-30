@@ -40,14 +40,14 @@ helm {
         version.set("3.7.0")
     }
 
-    val main = charts.create("k8s-learning") {
+    val main = charts.create(project.name) {
         sourceDir.set(file("${project.projectDir}/src/main/helm"))
     }
     tasks.named(main.updateDependenciesTaskName) {
         dependsOn(dockerBuildImage)
     }
     releases {
-        create("k8s-learning") {
+        create(project.name) {
             from(main)
             namespace.set(this@helm.namespace)
         }
@@ -61,4 +61,11 @@ helm {
 
 tasks.helmPackage {
     dependsOn(dockerBuildImage)
+}
+
+tasks.register("helmReinstall") {
+    group = "helm"
+    description = "Uninstall then reinstall the helm chart."
+    dependsOn("helmUninstall")
+    finalizedBy("helmInstall")
 }
