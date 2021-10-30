@@ -1,13 +1,15 @@
-package com.rnett.plugins
+package com.rnett.routes
 
 import com.rnett.common.Todo
-import com.rnett.plugins.db.TodoEntity
+import com.rnett.routes.db.TodoEntity
 import io.ktor.application.Application
 import io.ktor.application.call
+import io.ktor.application.install
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.response.respondText
+import io.ktor.routing.IgnoreTrailingSlash
 import io.ktor.routing.get
 import io.ktor.routing.patch
 import io.ktor.routing.post
@@ -19,9 +21,11 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 
 fun Application.configureRouting() {
 
+    install(IgnoreTrailingSlash)
+
     routing {
-        get("/hello"){
-            call.respondText("Hello World")
+        get("/hello") {
+            call.respondText("Hello from the backend!")
         }
         route("todo") {
             get {

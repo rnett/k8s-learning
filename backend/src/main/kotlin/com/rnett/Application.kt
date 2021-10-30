@@ -1,10 +1,10 @@
 package com.rnett
 
-import com.rnett.plugins.configureHTTP
-import com.rnett.plugins.configureMonitoring
-import com.rnett.plugins.configureRouting
-import com.rnett.plugins.configureSerialization
-import com.rnett.plugins.db.TodoTable
+import com.rnett.common.config.configureCORS
+import com.rnett.common.config.configureJson
+import com.rnett.common.config.configureLogging
+import com.rnett.routes.configureRouting
+import com.rnett.routes.db.TodoTable
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import org.jetbrains.exposed.sql.Database
@@ -23,8 +23,9 @@ fun main() {
         }
 
         configureRouting()
-        configureHTTP()
-        configureMonitoring()
-        configureSerialization()
+        configureCORS()
+        configureLogging()
+        configureJson()
     }.start(wait = true)
 }
+

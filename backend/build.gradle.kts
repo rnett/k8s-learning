@@ -12,10 +12,8 @@ plugins {
 
 dependencies {
     implementation(project(":common"))
-    implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
     implementation("io.ktor:ktor-html-builder:$ktor_version")
-    implementation("io.ktor:ktor-serialization:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
@@ -34,7 +32,7 @@ application {
 }
 
 docker {
-    javaApplication{
+    javaApplication {
         baseImage.set("openjdk:17-slim")
         ports.set(listOf(8080))
         images.set(setOf("k8s-learning/backend"))

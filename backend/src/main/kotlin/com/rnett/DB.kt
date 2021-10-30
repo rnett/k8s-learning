@@ -1,16 +1,11 @@
-package com.rnett.plugins.db
+package com.rnett.routes.db
 
 import com.rnett.common.Todo
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
-import org.jetbrains.exposed.dao.id.UUIDTable
-import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
-import java.util.*
 
 object TodoTable : LongIdTable("todos", "id") {
     val name = varchar("name", 255)
@@ -33,7 +28,7 @@ class TodoEntity(id: EntityID<Long>) : Entity<Long>(id) {
     var createdAt by TodoTable.createdAt
     var completedAt by TodoTable.completedAt
 
-    fun updateFromTodo(todo: Todo){
+    fun updateFromTodo(todo: Todo) {
         this.name = todo.name
         this.description = todo.description
         this.completed = todo.completed

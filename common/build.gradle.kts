@@ -12,4 +12,8 @@ plugins {
 dependencies {
     api("org.jetbrains.kotlinx:kotlinx-datetime:0.3.1")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+
+
+    api("io.ktor:ktor-server-core:$ktor_version")
+    api("io.ktor:ktor-serialization:$ktor_version")
 }

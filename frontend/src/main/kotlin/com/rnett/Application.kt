@@ -1,14 +1,17 @@
 package com.rnett
 
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
-import com.rnett.plugins.*
+import com.rnett.common.config.configureCORS
+import com.rnett.common.config.configureJson
+import com.rnett.common.config.configureLogging
+import com.rnett.routes.configureRouting
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
 
 fun main() {
     embeddedServer(Netty, port = 8081, host = "0.0.0.0") {
         configureRouting()
-        configureHTTP()
-        configureMonitoring()
-        configureSerialization()
+        configureCORS()
+        configureLogging()
+        configureJson()
     }.start(wait = true)
 }
