@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: k8s-learning
+    teir: backend
+spec:
+  replicas: {{ .Values.backend.replicas }}
+  selector:
+    matchLabels:
+      app: k8s-learning
+      teir: backend
+  template:
+    metadata:
+      labels:
+        app: k8s-learning
+        teir: backend
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: backend-container
+          image: "k8s-learning/backend:{{ .Values.backend.imageTag }}"
+          imagePullPolicy: Never
+          env:
+            - name: KLB_POSTGRES_URL
+              value: jdbc:postgresql://k8s-learning-postgresql:5432/{{ .Values.global.postgresql.postgresqlDatabase }}
+            - name: KLB_POSTGRES_USER
+              value: {{.Values.global.postgresql.postgresqlUsername}}
+            - name: KLB_POSTGRES_PASSWORD
+              value: {{.Values.global.postgresql.postgresqlPassword}}
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector:
+    app: k8s-learning
+    teir: backend
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080

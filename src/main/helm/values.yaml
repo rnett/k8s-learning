@@ -1,0 +1,14 @@
+backend:
+  replicas: 3
+  imageTag: latest
+
+frontend:
+  port: 8080
+  replicas: 3
+  imageTag: latest
+
+global:
+  postgresql:
+    postgresqlDatabase: k8s_learning
+    postgresqlUsername: postgres
+    postgresqlPassword: password

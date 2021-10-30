@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  labels:
+    app: k8s-learning
+    teir: frontend
+spec:
+  replicas: {{ .Values.frontend.replicas }}
+  selector:
+    matchLabels:
+      app: k8s-learning
+      teir: frontend
+  template:
+    metadata:
+      labels:
+        app: k8s-learning
+        teir: frontend
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: frontend-container
+          image: "k8s-learning/frontend:{{ .Values.frontend.imageTag }}"
+          imagePullPolicy: Never
+          env:
+            - name: KLF_SERVER_URL
+              value: http://backend:8080
+          ports:
+            - containerPort: 8081
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  type: LoadBalancer
+  selector:
+    app: k8s-learning
+    teir: frontend
+  ports:
+    - port: {{.Values.frontend.port}}
+      protocol: TCP
+      targetPort: 8081
