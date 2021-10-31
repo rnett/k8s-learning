@@ -23,6 +23,7 @@ plugins {
     id("org.unbroken-dome.helm-releases") version "1.6.1"
     id("org.beryx.runtime") version "1.12.7" apply false
     id("com.github.johnrengelman.shadow") version "7.0.0" apply false
+    id("com.github.sgtsilvio.gradle.proguard") version "0.3.0" apply false
 }
 
 allprojects {

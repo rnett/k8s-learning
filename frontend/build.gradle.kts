@@ -11,9 +11,11 @@ plugins {
     id("com.bmuschko.docker-java-application")
     id("org.beryx.runtime")
     id("com.github.johnrengelman.shadow")
+    id("com.github.sgtsilvio.gradle.proguard")
 }
 
 dependencies {
+    proguardClasspath("com.guardsquare:proguard-base:7.2.0-beta2")
     implementation(project(":common"))
 
     implementation("io.ktor:ktor-client-apache:$ktor_version")
@@ -114,6 +116,42 @@ tasks {
         }
 
         inputs.property("keepClasses", keepClasses)
+    }
+
+    val proguardJar by registering(proguard.taskClass) {
+        inJars(shadowJar)
+        group = "proguard"
+        dependsOn(shadowJar)
+        libraryJars(
+            file("${System.getProperty("java.home")}/jmods/java.base.jmod"),
+            "!**.jar;!module-info.class"
+        )
+        outJars(base.libsDirectory.file("${project.name}-${project.version}-all.jar"))
+        mappingFile.set(layout.buildDirectory.file("${project.name}-${project.version}-mapping.txt"))
+
+        rules.addAll(
+            "-dontoptimize",
+            "-dontwarn",
+            "-ignorewarnings",
+            "-dontobfuscate",
+            "-keep class ${application.mainClassName} { public static void main(java.lang.String[]); }",
+            "-keepattributes Module*",
+            "-keep class module-info"
+        )
+
+        val keepClasses = listOf(
+            "kotlin.reflect.jvm.internal.**",
+            "kotlin.text.RegexOption",
+            "io.ktor.client.engine.apache.ApacheEngineContainer",
+            "org.apache.commons.logging.impl.LogFactoryImpl",
+            "org.apache.commons.logging.**",
+            "ch.qos.logback.core.ConsoleAppender",
+            "* implements kotlinx.serialization.KSerializer",
+            "org.fusesource.jansi.**"
+        )
+        keepClasses.forEach {
+            rules.add("-keep class $it { public *; }")
+        }
     }
 
     shadowJar {
