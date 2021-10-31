@@ -24,7 +24,7 @@ spec:
           imagePullPolicy: Never
           env:
             - name: KLB_POSTGRES_URL
-              value: jdbc:postgresql://k8s-learning-postgresql:5432/{{ .Values.global.postgresql.postgresqlDatabase }}
+              value: k8s-learning-postgresql:5432/{{ .Values.global.postgresql.postgresqlDatabase }}
             - name: KLB_POSTGRES_USER
               value: {{.Values.global.postgresql.postgresqlUsername}}
             - name: KLB_POSTGRES_PASSWORD

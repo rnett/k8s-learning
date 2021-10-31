@@ -1,7 +1,7 @@
 package com.rnett.routes
 
+import com.rnett.TodoEntity
 import com.rnett.common.Todo
-import com.rnett.routes.db.TodoEntity
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install

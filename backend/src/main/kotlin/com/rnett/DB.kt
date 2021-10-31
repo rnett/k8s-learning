@@ -1,4 +1,4 @@
-package com.rnett.routes.db
+package com.rnett
 
 import com.rnett.common.Todo
 import org.jetbrains.exposed.dao.Entity

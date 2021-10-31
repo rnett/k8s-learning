@@ -40,7 +40,7 @@ spec:
         name: db
       spec:
         accessModes: [ "ReadWriteOnce" ]
-#        storageClassName: "database"
+        #        storageClassName: "database"
         resources:
           requests:
             storage: 500Mi
@@ -69,7 +69,7 @@ metadata:
     teir: backend
 spec:
   replicas: 3
-  selector: 
+  selector:
     matchLabels:
       app: k8s-learning
       teir: backend
@@ -87,7 +87,7 @@ spec:
           imagePullPolicy: Never
           env:
             - name: KLB_POSTGRES_URL
-              value: jdbc:postgresql://database-service:5432/
+              value: database-service:5432/
             - name: KLB_POSTGRES_USER
               value: postgres
             - name: KLB_POSTGRES_PASSWORD

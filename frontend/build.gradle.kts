@@ -49,7 +49,6 @@ tasks.dockerCreateDockerfile.configure {
 
 tasks.dockerPushImage.configure { enabled = false }
 
-
 tasks.dockerSyncBuildContext.configure {
     dependsOn("jre", "minimizedJar")
     from("$buildDir/jre")
@@ -64,6 +63,10 @@ tasks.dockerSyncBuildContext.configure {
 }
 
 tasks {
+    compileKotlin {
+        kotlinOptions.jvmTarget = "16"
+    }
+
     val minimizedJar = register<ProGuardTask>("minimizedJar") {
         group = "proguard"
         dependsOn(shadowJar)
