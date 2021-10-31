@@ -49,14 +49,13 @@ tasks.dockerCreateDockerfile.configure {
 
 tasks.dockerPushImage.configure { enabled = false }
 
-val useProguard = true
 
 tasks.dockerSyncBuildContext.configure {
-    dependsOn("jre", if (useProguard) "minimizedJar" else "shadowJar")
+    dependsOn("jre", "minimizedJar")
     from("$buildDir/jre")
     from("$buildDir/libs") {
         include {
-            it.name.endsWith("$version-all${if (useProguard) "-min" else ""}.jar")
+            it.name.endsWith("$version-all.jar")
         }
         rename {
             "app.jar"
@@ -65,12 +64,13 @@ tasks.dockerSyncBuildContext.configure {
 }
 
 tasks {
-    register<ProGuardTask>("minimizedJar") {
+    val minimizedJar = register<ProGuardTask>("minimizedJar") {
+        group = "proguard"
         dependsOn(shadowJar)
 
         injars(shadowJar.get().archiveFile.get().asFile)
-        outjars(shadowJar.get().archiveFile.get().asFile.let {
-            it.parentFile.resolve("${it.nameWithoutExtension}-min.jar")
+        outjars(jar.get().archiveFile.get().asFile.let {
+            it.resolveSibling(it.nameWithoutExtension + "-all.${it.extension}")
         })
 
         val filter = mapOf(
@@ -112,8 +112,13 @@ tasks {
 
         inputs.property("keepClasses", keepClasses)
     }
-    jre.configure {
-        dependsOn(shadowJar)
+
+    shadowJar {
+        archiveClassifier.set("shadow")
+    }
+
+    jre {
+        dependsOn(minimizedJar)
     }
 }
 
