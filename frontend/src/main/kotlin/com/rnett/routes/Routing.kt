@@ -10,6 +10,7 @@ import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.client.HttpClient
 import io.ktor.client.call.receive
+import io.ktor.client.engine.apache.Apache
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.features.logging.LogLevel
@@ -33,7 +34,7 @@ import kotlinx.css.CssBuilder
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
-val client = HttpClient {
+val client = HttpClient(Apache) {
     install(JsonFeature) {
         serializer = KotlinxSerializer()
     }

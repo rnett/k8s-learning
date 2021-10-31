@@ -1,5 +1,14 @@
 import org.unbrokendome.gradle.plugins.helm.rules.updateDependenciesTaskName
 
+buildscript {
+    repositories {
+        mavenCentral() // For the ProGuard Gradle Plugin and anything else.
+    }
+    dependencies {
+        classpath("com.guardsquare:proguard-gradle:7.2.0-beta2") // The ProGuard Gradle plugin.
+    }
+}
+
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -9,8 +18,11 @@ plugins {
     kotlin("jvm") version "1.5.31" apply false
     id("org.jetbrains.kotlin.plugin.serialization") version "1.5.31" apply false
     id("com.bmuschko.docker-java-application") version "7.1.0" apply false
+    id("com.bmuschko.docker-remote-api") version "7.1.0" apply false
     id("org.unbroken-dome.helm") version "1.6.1"
     id("org.unbroken-dome.helm-releases") version "1.6.1"
+    id("org.beryx.runtime") version "1.12.7" apply false
+    id("com.github.johnrengelman.shadow") version "7.0.0" apply false
 }
 
 allprojects {
@@ -54,6 +66,8 @@ helm {
     }
     releaseTargets {
         create("local") {
+            values.put("frontend.replicas", "1")
+            values.put("backend.replicas", "1")
         }
         activeReleaseTarget.set("local")
     }
